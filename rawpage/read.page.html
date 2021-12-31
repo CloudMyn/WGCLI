@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stub test</title>
+
+
+    <style>
+        :root {
+            --bg-mcolor: #02121b;
+            --bg-box-color: #172734;
+            --color-box-shadow: #000313;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        all {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-mcolor);
+        }
+
+        body p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        /* CSS */
+        .button-me {
+            background: #354268;
+            border-radius: 999px;
+            box-shadow: 0 0 20px #080f22;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto ColorEmoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 20px;
+            opacity: 1;
+            outline: 0 solid transparent;
+            padding: 3px 30px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: fit-content;
+            word-break: break-word;
+            border: 0;
+            transition: all .3s;
+            max-width: 250px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .button-me:hover {
+            background: #465686;
+            box-shadow: 0 0 5px #0f131d;
+        }
+
+        body div#wraper {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .one-line {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-clamp: 1;
+            display: -webkit-box;
+            line-clamp: 1;
+            -webkit-line-clamp: 1;
+        }
+
+        div.box {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0px;
+            transition: all .3s;
+        }
+
+        div.box .box-header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            margin: 0;
+        }
+
+        div.box .title {
+            display: inline-block;
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+            color: #92b7b8;
+        }
+
+        div.box .reader-area {
+            margin: 0;
+            border-radius: 5px;
+            background-color: #0b1824;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            transition: all .3s;
+        }
+
+        div.box .reader-area canvas {
+            position: relative;
+            width: 100%;
+            height: auto;
+        }
+
+        div.box .reader-area img {
+            position: relative;
+            height: auto;
+            width: 100%;
+        }
+
+        div.box .box-footer {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        div.box .box-footer .action {
+            position: relative;
+            width: 100%;
+        }
+
+
+        div.box .box-footer .action button {
+            position: relative;
+        }
+
+
+
+        div.box .box-footer .footer-text {
+            font-size: 18px;
+            padding: 0;
+            margin: 0;
+            font-weight: 600;
+            color: #92b7b8;
+        }
+
+        @media screen and (min-width: 640px) {
+            div.box {
+                /* margin-top: 20px; */
+                width: 45vw;
+                height: 100vh;
+                border-radius: 0;
+                background-color: var(--bg-box-color);
+                box-shadow: 0 0 40px var(--color-box-shadow);
+            }
+
+            div.box .reader-area {
+                border-radius: 0;
+            }
+        }
+
+
+        @media screen and (min-width: 780px) {
+            div.box {
+                width: 40vw;
+            }
+
+        }
+
+        @media screen and (min-width: 780px) {
+            div.box {
+                width: 35vw;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wraper">
+
+        <div class="box">
+
+            <div class="box-header">
+                <span class="one-line title">
+                    Chapter 1
+                </span>
+            </div>
+
+            <div class="reader-area">
+
+                <!-- <img src="sample.jpg" alt=""> -->
+
+            </div>
+
+            <div class="box-footer">
+                <span class="action">
+                    <button class="button-me" role="button" onclick="window.history.back()">
+                        back
+                    </button>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <script>
+        let readerArea = document.querySelector('.reader-area');
+        let boxhead = document.querySelector('.box-header');
+        let boxfoot = document.querySelector('.box-footer');
+
+
+        window.addEventListener("DOMContentLoaded", async function () {
+            let images = readerArea.children;
+
+            let canvas = [];
+
+            for (let i = 0; i < images.length; i++) {
+
+                let image = images[i];
+
+                if (image.hasAttribute('lazy-src') === false) return;
+
+                let url = image.getAttribute('lazy-src');
+
+                let img = await loadImage(url);
+
+                let canvas = document.createElement("canvas");
+
+                let ctx = canvas.getContext("2d");
+
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                ctx.drawImage(img, 0, 0);
+
+                image.replaceWith(canvas);
+            }
+
+        });
+
+        function loadImage(url) {
+
+            return new Promise((resolve, reject) => {
+
+                const image = new Image();
+
+                image.addEventListener('load', () => resolve(image));
+
+                image.addEventListener('error', (err) => {
+                    reject(err);
+                    console.log(err);
+                });
+
+                image.src = url;
+            });
+        }
+
+        function drawDataURIOnCanvas(strDataURI, canvas) {
+            "use strict";
+            let img = new window.Image();
+            img.addEventListener("load", function () {
+                canvas.getContext("2d").drawImage(img, 0, 0);
+            });
+            img.setAttribute("src", strDataURI);
+        }
+
+        readerArea.addEventListener('scroll', (e) => {
+            if ((readerArea.scrollHeight - 1100) < readerArea.scrollTop || readerArea.scrollTop < 300) {
+                boxhead.style.display = 'flex';
+                boxfoot.style.display = 'flex';
+            } else {
+                boxhead.style.display = 'none';
+                boxfoot.style.display = 'none';
+            }
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.code === "Space") {
+                let scrollHeight = readerArea.scrollTop;
+                readerArea.scroll(0, scrollHeight.toFixed(2) + 70);
+            }
+        });
+
+    </script>
+
+
+</body>
+
+</html>

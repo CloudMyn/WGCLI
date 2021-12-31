@@ -1,0 +1,27 @@
+name: cli
+description: A sample command-line application.
+version: 1.0.0
+# homepage: https://www.example.com
+
+environment:
+  sdk: '>=2.16.0-80.1.beta <3.0.0'
+
+
+dependencies:
+  path: ^1.8.1
+  dio: ^4.0.4
+  image: ^3.1.0
+  faker: ^2.0.0
+  args: ^2.3.0
+  colorize: ^3.0.0
+  web_scraper: ^0.1.4
+  mockito: ^5.0.17
+  enough_ascii_art: ^1.0.0
+  # win32: ^2.3.3
+  # logger: ^1.1.0
+  # dart_phonetics: ^1.0.1
+  # dcli: ^1.15.5
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0

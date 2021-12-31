@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stub test</title>
+
+
+    <style>
+        :root {
+            --bg-mcolor: #02121b;
+            --bg-box-color: #172734;
+            --color-box-shadow: #000313;
+        }
+
+        all {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-mcolor);
+        }
+
+        body p,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6,
+        span {
+            font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        }
+
+        /* CSS */
+        .button-me {
+            background: #354268;
+            border-radius: 999px;
+            box-shadow: 0 0 20px #080f22;
+            box-sizing: border-box;
+            color: #FFFFFF;
+            cursor: pointer;
+            font-family: Inter, Helvetica, "Apple Color Emoji", "Segoe UI Emoji", NotoColorEmoji, "Noto ColorEmoji", "Segoe UI Symbol", "Android Emoji", EmojiSymbols, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", sans-serif;
+            font-size: 14px;
+            font-weight: 700;
+            line-height: 20px;
+            opacity: 1;
+            outline: 0 solid transparent;
+            padding: 3px 30px;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: fit-content;
+            word-break: break-word;
+            border: 0;
+            transition: all .3s;
+            max-width: 250px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        body div#wraper {
+            display: flex;
+            padding: 0;
+            margin: 0;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+        }
+
+        div.box {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100vw;
+            height: 100vh;
+            border-radius: 0px;
+            padding: 0 10px;
+            transition: width, height .2s;
+        }
+
+        div.box .box-header {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            padding: 5px;
+            margin: 0;
+        }
+
+        div.box .title {
+            padding: 10px 0;
+            margin: 0;
+            font-weight: 600;
+            color: #92b7b8;
+        }
+
+        div.box .box-chapters {
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #0b1824;
+            position: relative;
+            width: 100%;
+            height: 85%;
+            overflow-y: auto;
+        }
+
+        div.box .box-chapters .chapter-link {
+            position: relative;
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            color: #759ba1;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all .2s;
+        }
+
+        div.box .box-chapters a.chapter-link:hover {
+            color: #27344d;
+            background-color: #759ba1;
+        }
+
+        div.box .box-chapters a.chapter-link:visited {
+            color: #476baa;
+            background-color: #233141;
+        }
+
+        .box-chapters .chapter-link span {
+            margin: 5px;
+        }
+
+        div.box .box-footer {
+            padding: 10px 0;
+        }
+
+        div.box .box-footer .footer-text {
+            font-size: 18px;
+            padding: 0;
+            margin: 0;
+            font-weight: 600;
+            color: #92b7b8;
+        }
+
+        @media screen and (min-width: 640px) {
+            div.box {
+                /* margin-top: 20px; */
+                width: 45vw;
+                height: 80vh;
+                border-radius: 10px;
+                background-color: var(--bg-box-color);
+                box-shadow: 0 0 40px var(--color-box-shadow);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <div id="wraper">
+
+        <div class="box">
+
+            <div class="box-header">
+                <span class="title one-line">
+                    Vendor
+                </span>
+            </div>
+
+            <div class="box-chapters">
+
+            </div>
+
+            <div class="box-footer">
+                <span class="action">
+                    <button class="button-me"style="display: none" role="button" onclick="window.history.back()">
+                        back 
+                    </button>
+                </span>
+            </div>
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>
