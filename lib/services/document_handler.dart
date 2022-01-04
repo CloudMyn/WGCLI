@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures, library_prefixes
+// ignore_for_file: non_constant_identifier_names, curly_braces_in_flow_control_structures
 
 import 'package:cli/bootstrap.dart';
 import 'package:html/parser.dart';
@@ -17,6 +17,9 @@ class DocumentHandler {
       String templatePath = getTmpPath();
 
       File template = File(templatePath);
+
+      if (await template.exists() == false)
+        throw DocumentError("Web template not found in directory './rawpage'");
 
       return dom = parse(await template.readAsString());
     } on FileSystemException catch (e) {
