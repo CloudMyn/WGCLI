@@ -1,7 +1,6 @@
 // ignore_for_file: unnecessary_this
 
 import 'package:colorize/colorize.dart';
-import 'package:path/path.dart';
 
 extension MapPrint on Map<String, dynamic> {
   void println() {

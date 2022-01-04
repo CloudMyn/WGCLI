@@ -1,6 +1,7 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, non_constant_identifier_names
 
 import 'package:cli/bootstrap.dart';
+import 'package:cli/webs/luminous_scans.dart';
 
 Future<bool> runtime_cli() async {
   try {
@@ -129,7 +130,7 @@ Future<void> _scrapeTask() async {
   if (webIndex == 909)
     throw InputException("Invalid character detected, Only accepted number");
 
-  if (webIndex > 1) throw InputException("No websites with index: [$webIndex]");
+  if (webIndex > _getWebsites().length - 1) throw InputException("No websites with index: [$webIndex]");
 
   _log([
     "Website with index [$webIndex] selected",
@@ -150,6 +151,9 @@ Future<void> _scrapeTask() async {
       break;
     case 1:
       web = AsuraScans(comic: url);
+      break;
+    case 2:
+      web = LuminousScans(comic: url);
       break;
     default:
   }
@@ -225,5 +229,6 @@ List<String> _getWebsites() {
   return [
     '[0]  https://www.kiryuu.id/',
     '[1]  https://www.asurascans.com/',
+    '[2]  https://luminousscans.com/'
   ];
 }

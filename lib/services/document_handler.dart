@@ -82,6 +82,8 @@ class DocumentHandler {
 
       String comic_name = comics.split('\\').last.replaceAll('-', ' ');
 
+      comic_name = comic_name.replaceAll('.html', '');
+
       anchor.innerHtml = "<span>$comic_name</span> <span>$date</span>";
 
       boxComic.append(anchor);

@@ -78,40 +78,10 @@ class KiryuuId extends Scraper implements ComicScraper {
         String chap = lastURL(key);
         List<String> images = value as List<String>;
 
-        List<String> imagesName = [];
-
-        int downloadCount = 1;
-        int index = 0;
-
         "Downloading chapter $chap".println(Styles.LIGHT_YELLOW);
 
-        while (downloadCount != images.length) {
-          if (index < images.length) {
-            String image = images[index];
-
-            if (isDOwnloadable == false) {
-              imagesName.add(image);
-              continue;
-            }
-
-            String filename = lastURL(image);
-
-            imagesName.add(filename);
-
-            String path = ComicScraper.getStorePath(this, chap, filename);
-
-            "Downloading file: $filename".println(Styles.YELLOW);
-
-            super.downloadFile(image, path).then((value) {
-              "File '$value' downloaded successfuly".println(Styles.GREEN);
-              downloadCount++;
-            });
-          } else {
-            await Future.delayed(Duration(seconds: 10));
-          }
-
-          index++;
-        }
+        List<String> imagesName = await super.downloadMultilple(
+            images, ComicScraper.getStorePath(this, chap, ""));
 
         "Download completed".println(Styles.LIGHT_GREEN);
 

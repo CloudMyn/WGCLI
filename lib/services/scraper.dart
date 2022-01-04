@@ -1,14 +1,10 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, unnecessary_new
 
-import 'dart:convert';
-import 'dart:ffi';
-import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:cli/bootstrap.dart';
 import 'package:dio/dio.dart';
 import 'package:image/image.dart';
-import 'package:path/path.dart';
 import 'package:web_scraper/web_scraper.dart';
 
 class Scraper {
@@ -52,7 +48,7 @@ class Scraper {
 
     data = scraper.getElement(selector, attributes);
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 5));
 
     return data;
   }
@@ -143,35 +139,70 @@ class Scraper {
     }
   }
 
-  Future<void> downloadMultilple(
+  Future<List<String>> downloadMultilple(
     List<String> urls,
-    List<String> paths, {
-    int maxDownload = 2,
+    String dest, {
+    bool isDownloadable = true,
     Function(String)? onDonwload,
     Function(bool)? onDownloadCompleted,
   }) async {
-    if (urls.length != paths.length)
-      throw ScraperException('Urls and paths must equally same length!');
+    List<List<String>> chunks = chunckUrls(urls);
 
-    for (int i = 0; i < urls.length; i++) {
-      var url = urls[i];
-      var path = paths[i];
+    List<String> imagesName = [];
 
-      var ish = IsolateHandler();
+    for (List<String> chunk in chunks) {
+      // ...
 
-      await ish.compute(_isodownloadFile, [url, path]);
+      bool isChunkCompleted = false;
+      int downloadCount = 0;
+
+      bool isOneChunk = chunk.length == 1 ? true : false;
+
+      // wait until each urls in chunk downloaded
+      while (isChunkCompleted == false) {
+        if (chunk.isEmpty) await Future.delayed(Duration(seconds: 5));
+
+        // loop through chunk
+        for (String url in chunk) {
+          String filename = lastURL(url);
+
+          imagesName.add(filename);
+
+          if (isDownloadable == false) continue;
+
+          "Downloading file: $filename".println(Styles.YELLOW);
+
+          downloadFile(url, dest + Platform.pathSeparator + filename)
+              .then((value) {
+            "File '$value' downloaded successfuly".println(Styles.GREEN);
+            downloadCount++;
+
+            if (isOneChunk == true && downloadCount == 1) {
+              isChunkCompleted = true;
+            }
+
+            if (downloadCount == 2) {
+              isChunkCompleted = true;
+            }
+          });
+        }
+
+        chunk = [];
+      }
+
+      // ...
     }
+
+    return imagesName;
   }
 
-  static Future<void> _isodownloadFile(List<String> data) async {
-    "on isolate2".println();
-
-    var url = data[0];
-    var path = data[1];
-
-    Scraper scraper = Scraper();
-
-    await scraper.downloadFile(url, path);
+  List<List<String>> chunckUrls(List<String> urls, [int chunkSize = 2]) {
+    List<List<String>> chunks = [];
+    for (var i = 0; i < urls.length; i += chunkSize) {
+      chunks.add(urls.sublist(
+          i, i + chunkSize > urls.length ? urls.length : i + chunkSize));
+    }
+    return chunks;
   }
 
   Future<String> downloadFile(
