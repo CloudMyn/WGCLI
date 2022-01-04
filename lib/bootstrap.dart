@@ -31,6 +31,7 @@ export './services/isolate_handler.dart';
 // webs
 export './webs/asura_scans.dart';
 export './webs/kiryuu_id.dart';
+export './webs/luminous_scans.dart';
 
 // deps
 export 'package:colorize/colorize.dart';

@@ -1,13 +1,10 @@
 // ignore_for_file: curly_braces_in_flow_control_structures, non_constant_identifier_names
 
 import 'package:cli/bootstrap.dart';
-import 'package:cli/webs/luminous_scans.dart';
 
 Future<bool> runtime_cli() async {
   try {
     // ...
-
-    _help();
 
     _logSupportedWebs();
 

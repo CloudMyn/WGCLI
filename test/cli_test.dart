@@ -6,7 +6,7 @@ import 'package:cli/bootstrap.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('Kiryuu test scraping', () async {
+  test('Kiryuu id test', () async {
     const testURL = 'https://kiryuu.id/manga/the-villain-of-destiny/';
 
     ComicScraper web = KiryuuId(comic: testURL);
@@ -17,11 +17,24 @@ void main() {
 
     // ...
   });
-  test('AsuraScans test scraping', () async {
+  test('Asura scans test', () async {
     const testURL =
         "https://www.asurascans.com/comics/20-reformation-of-the-deadbeat-noble/";
 
     ComicScraper web = AsuraScans(comic: testURL);
+
+    bool result = await full_scraping_test(web);
+
+    expect(result, true);
+
+    // ...
+  });
+
+  test('Luminous scans test', () async {
+    const testURL =
+        "https://www.asurascans.com/comics/20-reformation-of-the-deadbeat-noble/";
+
+    ComicScraper web = LuminousScans(comic: testURL);
 
     bool result = await full_scraping_test(web);
 
@@ -37,11 +50,9 @@ Future<bool> full_scraping_test(ComicScraper web) async {
   return await worker.runTask((ComicScraper web) async {
     // ...
 
-    "Start\t: Get comic chapters".println();
+    "\nStart: Getting comic chapters...".println(Styles.YELLOW);
 
     await web.getChapters();
-
-    "Done\t: Get comic chapters".println();
 
     String chaptersListLog = await logListting(web.chapters);
 
@@ -52,24 +63,46 @@ Future<bool> full_scraping_test(ComicScraper web) async {
       extendDivider: 8,
     );
 
-    String selected = '0';
+    "Done: Getting comic chapter completed.\n".println(Styles.GREEN);
 
-    "Start\t: Get chapters images".println();
+    String selected = ask(
+      "Choose chapters you want to save: ",
+      require: true,
+      defaultValue: '',
+    ).toString();
 
-    await web.getChapterImages(selected);
+    "\nStart: Getting images on each selected chapters..."
+        .println(Styles.YELLOW);
 
-    "Done\t: Get chapters images".println();
+    bool result = await web.getChapterImages(selected);
+
+    if (result == false) return false;
 
     String selectedListLog = await logListting(web.chaptersImages);
 
     log(
-      "## Selected chapters! ##",
+      "** Selected chapters **",
       selectedListLog,
       logStack: LogStack.info,
-      extendDivider: 30,
+      extendDivider: 15,
     );
 
-    await web.saveChapters(true);
+    "Done: Getting images on each selected chapters completed.\n"
+        .println(Styles.GREEN);
+
+    var rsp2 = ask(
+      'Would you like to download the images and store it? (Y/N)[Y] : ',
+      require: true,
+      defaultValue: 'Y',
+    )!
+        .toString()
+        .toLowerCase();
+
+    "".println();
+
+    bool isDOwnloadable = rsp2 != 'y' ? false : true;
+
+    await web.saveChapters(isDOwnloadable);
 
     return true;
 
