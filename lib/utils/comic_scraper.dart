@@ -27,7 +27,7 @@ abstract class ComicScraper extends Scraper {
 
   Future<void> getChapters();
 
-  Future<bool> getChapterImages(String selected);
+  Future<bool> getChapterImages(List<String> selected);
 
   Future<bool> saveChapters(bool isDownloadable);
 

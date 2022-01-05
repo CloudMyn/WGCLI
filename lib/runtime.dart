@@ -127,7 +127,8 @@ Future<void> _scrapeTask() async {
   if (webIndex == 909)
     throw InputException("Invalid character detected, Only accepted number");
 
-  if (webIndex > _getWebsites().length - 1) throw InputException("No websites with index: [$webIndex]");
+  if (webIndex > _getWebsites().length - 1)
+    throw InputException("No websites with index: [$webIndex]");
 
   _log([
     "Website with index [$webIndex] selected",
@@ -175,16 +176,7 @@ Future<void> _scrapeTask() async {
 
     "Done: Getting comic chapter completed.\n".println(Styles.GREEN);
 
-    String selected = ask(
-      "Choose chapters you want to save: ",
-      require: true,
-      defaultValue: '',
-    ).toString();
-
-    "\nStart: Getting images on each selected chapters..."
-        .println(Styles.YELLOW);
-
-    bool result = await web.getChapterImages(selected);
+    bool result = await selectChapters(web);
 
     if (result == false) return false;
 
@@ -228,4 +220,77 @@ List<String> _getWebsites() {
     '[1]  https://www.asurascans.com/',
     '[2]  https://luminousscans.com/'
   ];
+}
+
+Future<bool> selectChapters(ComicScraper web) async {
+  List<String> chapters = web.chapters;
+
+  String response = ask(
+    "Choose chapters you want to save: ",
+    require: true,
+    defaultValue: '',
+  ).toString().toLowerCase();
+
+  "\nStart: Getting images on each selected chapters...".println(Styles.YELLOW);
+
+  if (chapters.isEmpty)
+    throw ScraperException("There is no chapters available!");
+
+  List<String> selectedChp = [];
+
+  // perintah 'all' akan memilih semua chapter yang tersedia
+  if (response == 'all') {
+    selectedChp.addAll(web.chapters);
+  }
+
+  // perintah 'except' akan memilih semua chapter kecuali yang di masukkan
+  else if (response.contains('all-x:')) {
+    String xchp = response.split(":").last;
+
+    for (int i = 0; i < chapters.length; i++) {
+      bool exception = xchp.contains(i.toString());
+
+      if (exception) continue;
+
+      selectedChp.add(chapters[i]);
+    }
+  }
+
+  // jika terdapat karakter '..' sebelum dan setelahnya nomor
+  // maka perintah tersebut adalah 'range'
+  else if (response.contains('..')) {
+    int? min = int.tryParse(response.split('..').first);
+    int? max = int.tryParse(response.split('..').last);
+
+    if (min == null || max == null)
+      throw RuntimeException("Invalid range command");
+
+    if (min >= max)
+      throw RuntimeException('First index must greater than Last index');
+
+    if (max == 0) throw RuntimeException("Max range cannot be 0");
+
+    if (max > chapters.length) throw RuntimeException('Max range overflow');
+
+    for (int i = 0; i < chapters.length; i++) {
+      if (i >= min && i <= max) selectedChp.add(chapters[i]);
+    }
+  }
+
+  // if response contains only comma and numbers
+  else if (response.contains(',')) {
+    for (int i = 0; i < chapters.length; i++) {
+      bool isSelected = response.contains(i.toString());
+
+      if (!isSelected) continue;
+
+      selectedChp.add(chapters[i]);
+    }
+  }
+
+  // if response is integer
+  else if (int.tryParse(response) != null) {
+    selectedChp.add(chapters[int.parse(response)]);
+  }
+  return await web.getChapterImages(selectedChp);
 }

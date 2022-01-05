@@ -38,12 +38,7 @@ class AsuraScans extends Scraper implements ComicScraper {
   }
 
   @override
-  Future<bool> getChapterImages(String selected) async {
-    if (chapters.isEmpty)
-      throw ScraperException("There is no chapters available!");
-
-    List<String> selectedChp = super.syncSelect(selected, chapters);
-
+  Future<bool> getChapterImages(List<String> selectedChp) async {
     List<String> attributes = ['src', 'lazy'];
 
     for (String chap in selectedChp) {
