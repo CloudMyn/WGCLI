@@ -146,7 +146,14 @@ class Scraper {
     Function(String)? onDonwload,
     Function(bool)? onDownloadCompleted,
   }) async {
-    List<List<String>> chunks = chunckUrls(urls);
+    
+    int chunkSize = 2;
+
+    if (urls.length >= 15) {
+      chunkSize = 6;
+    }
+
+    List<List<String>> chunks = chunckUrls(urls, chunkSize);
 
     List<String> imagesName = [];
 
@@ -156,7 +163,7 @@ class Scraper {
       bool isChunkCompleted = false;
       int downloadCount = 0;
 
-      bool isOneChunk = chunk.length == 1 ? true : false;
+      bool isLastChunk = chunk.length < chunkSize ? true : false;
 
       // wait until each urls in chunk downloaded
       while (isChunkCompleted == false) {
@@ -177,11 +184,11 @@ class Scraper {
             "File '$value' downloaded successfuly".println(Styles.GREEN);
             downloadCount++;
 
-            if (isOneChunk == true && downloadCount == 1) {
+            if (isLastChunk == true) {
               isChunkCompleted = true;
             }
 
-            if (downloadCount == 2) {
+            if (downloadCount == chunkSize) {
               isChunkCompleted = true;
             }
           });
@@ -196,8 +203,10 @@ class Scraper {
     return imagesName;
   }
 
-  List<List<String>> chunckUrls(List<String> urls, [int chunkSize = 2]) {
+  List<List<String>> chunckUrls(List<String> urls, int chunkSize) {
     List<List<String>> chunks = [];
+
+
     for (var i = 0; i < urls.length; i += chunkSize) {
       chunks.add(urls.sublist(
           i, i + chunkSize > urls.length ? urls.length : i + chunkSize));
@@ -221,8 +230,8 @@ class Scraper {
       return lastURL(url);
     } on ThrowableX {
       rethrow;
-    } catch (e) {
-      throw ScraperError(e.toString());
+    } on ImageException {
+      return url;
     }
   }
 
@@ -243,11 +252,15 @@ class Scraper {
   }
 
   List<int> compressImage(List<int> bytes) {
-    Image? image = decodeImage(bytes);
+    try {
+      Image? image = decodeImage(bytes);
 
-    if (image == null) throw ImageException("Failed to encode image");
+      if (image == null) throw ImageException("Failed to encode image");
 
-    return encodeJpg(image, quality: 65);
+      return encodeJpg(image, quality: 65);
+    } catch (_) {
+      return bytes;
+    }
   }
 
   Future<bool> saveFileAsString(String dest, String content) async {
