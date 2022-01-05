@@ -65,16 +65,7 @@ Future<bool> full_scraping_test(ComicScraper web) async {
 
     "Done: Getting comic chapter completed.\n".println(Styles.GREEN);
 
-    String selected = ask(
-      "Choose chapters you want to save: ",
-      require: true,
-      defaultValue: '',
-    ).toString();
-
-    "\nStart: Getting images on each selected chapters..."
-        .println(Styles.YELLOW);
-
-    bool result = await web.getChapterImages(selected);
+    bool result = await web.getChapterImages([web.chapters[0]]);
 
     if (result == false) return false;
 
