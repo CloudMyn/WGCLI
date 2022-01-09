@@ -176,21 +176,9 @@ Future<void> _scrapeTask() async {
 
     "Done: Getting comic chapter completed.\n".println(Styles.GREEN);
 
-    bool result = await selectChapters(web);
+    List<String> selectedChapters = await selectChapters(web);
 
-    if (result == false) return false;
-
-    String selectedListLog = await logListting(web.chaptersImages);
-
-    log(
-      "** Selected chapters **",
-      selectedListLog,
-      logStack: LogStack.info,
-      extendDivider: 15,
-    );
-
-    "Done: Getting images on each selected chapters completed.\n"
-        .println(Styles.GREEN);
+    if (selectedChapters.isEmpty) return false;
 
     var rsp2 = ask(
       'Would you like to download the images and store it? (Y/N)[Y] : ',
@@ -203,6 +191,20 @@ Future<void> _scrapeTask() async {
     "".println();
 
     bool isDOwnloadable = rsp2 != 'y' ? false : true;
+
+    await web.getChapterImages(selectedChapters);
+
+    String selectedListLog = await logListting(web.chaptersImages);
+
+    log(
+      "** Selected chapters **",
+      selectedListLog,
+      logStack: LogStack.info,
+      extendDivider: 15,
+    );
+
+    "Done: Getting images on each selected chapters completed.\n"
+        .println(Styles.GREEN);
 
     await web.saveChapters(isDOwnloadable);
 
@@ -222,7 +224,7 @@ List<String> _getWebsites() {
   ];
 }
 
-Future<bool> selectChapters(ComicScraper web) async {
+Future<List<String>> selectChapters(ComicScraper web) async {
   List<String> chapters = web.chapters;
 
   String response = ask(
@@ -292,5 +294,6 @@ Future<bool> selectChapters(ComicScraper web) async {
   else if (int.tryParse(response) != null) {
     selectedChp.add(chapters[int.parse(response)]);
   }
-  return await web.getChapterImages(selectedChp);
+
+  return selectedChp;
 }

@@ -14,10 +14,29 @@ class FSHandler {
 
     Directory directory = Directory(root_dir);
 
+    List<String> webs = [];
+
     await for (FileSystemEntity fs_web in directory.list()) {
-      // genning webs directory
+      if (fs_web is File || fs_web is Link) continue;
+
+      // getting webs directory
       await genWebDirectory(fs_web);
+
+      webs.add(lastURL(fs_web.path));
     }
+
+    DocumentHandler document = DocumentHandler(PageType.web);
+
+    await document.loadTemplate();
+
+    document.assignData(
+      documentTitle: "WGCLI Web App",
+      headerText: 'WGCLI',
+      footerText: 'WGCLI',
+      items: webs,
+    );
+
+    document.storeDocument("${directory.path}${sp}index.html");
   }
 
   Future<void> genWebDirectory(FileSystemEntity fs_web) async {
@@ -26,6 +45,8 @@ class FSHandler {
     List<String> comicPath = [];
 
     await for (FileSystemEntity fs_comic in directory.list()) {
+      if (fs_comic is File || fs_comic is Link) continue;
+
       // genning comics directory
       String? cpath = await genComicDirectory(fs_comic);
 
@@ -47,7 +68,7 @@ class FSHandler {
       items: comicPath,
     );
 
-    document.storeDocument("${directory.path}$sp$vendor.html");
+    document.storeDocument("${directory.path}${sp}index.html");
   }
 
   Future<String?> genComicDirectory(FileSystemEntity fs_comic) async {
@@ -91,11 +112,11 @@ class FSHandler {
       items: chapters_path,
     );
 
-    String docPath = "${comic_dir.path}$sp$comic_name.html";
+    String docPath = "${comic_dir.path}${sp}index.html";
 
     await document.storeDocument(docPath);
 
-    return "$comic_name$sp$comic_name.html";
+    return comic_name;
   }
 
   Future<String?> genChapterDirectory({

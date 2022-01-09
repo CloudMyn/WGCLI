@@ -51,6 +51,7 @@ class DocumentHandler {
 
     switch (pageType) {
       case PageType.web:
+        _assignWebPageData(items);
         break;
       case PageType.comic:
         _assignComicPageData(items);
@@ -64,6 +65,33 @@ class DocumentHandler {
     }
   }
 
+  void _assignWebPageData(List<String> items) {
+    Element? boxComic = dom!.querySelector("#wraper .box .box-chapters");
+
+    if (boxComic == null)
+      throw DocumentException("Cannot find .box-chapters element!");
+
+    boxComic.innerHtml = "";
+
+    DateTime dt = DateTime.now();
+
+    for (String comic in items) {
+      Element anchor = dom!.createElement('a');
+
+      anchor.attributes.addAll({'href': "$comic/index.html"});
+
+      anchor.classes.add('chapter-link');
+
+      String date = "${dt.year}";
+
+      String vendor = comic.split('\\').last.replaceAll('-', ' ');
+
+      anchor.innerHtml = "<span>$vendor</span> <span>$date</span>";
+
+      boxComic.append(anchor);
+    }
+  }
+
   void _assignComicPageData(List<String> items) {
     Element? boxComic = dom!.querySelector("#wraper .box .box-chapters");
 
@@ -74,16 +102,16 @@ class DocumentHandler {
 
     DateTime dt = DateTime.now();
 
-    for (String comics in items) {
+    for (String comic in items) {
       Element anchor = dom!.createElement('a');
 
-      anchor.attributes.addAll({'href': comics});
+      anchor.attributes.addAll({'href': "$comic/index.html"});
 
       anchor.classes.add('chapter-link');
 
-      String date = "${dt.month}:${dt.year}";
+      String date = "${dt.year}";
 
-      String comic_name = comics.split('\\').last.replaceAll('-', ' ');
+      String comic_name = comic.split('\\').last.replaceAll('-', ' ');
 
       comic_name = comic_name.replaceAll('.html', '');
 
@@ -176,7 +204,7 @@ class DocumentHandler {
     String route = '';
     switch (pageType) {
       case PageType.web:
-        route = App.rawpage_directory();
+        route = App.rawpage_directory('webs.page.html');
         break;
       case PageType.comic:
         route = App.rawpage_directory('comics.page.html');

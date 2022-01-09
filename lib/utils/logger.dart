@@ -143,5 +143,7 @@ Future<String> logListting(List<dynamic> data) async {
 }
 
 String lastURL(String url) {
-  return url.replaceAll('/', ' ').trim().split(' ').last;
+  String char = '\\';
+  if (url.contains('/')) char = '/';
+  return url.replaceAll(char, ' ').trim().split(' ').last;
 }
